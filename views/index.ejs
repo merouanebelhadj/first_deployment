@@ -1,545 +1,514 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="auto">
-<head>
+  <head>
     <script src="./js/color-modes.js"></script>
-    <link rel="stylesheet" href="./bootstrap-icons-1.10.5/font/bootstrap-icons.min.css">
+    <link
+      rel="stylesheet"
+      href="./bootstrap-icons-1.10.5/font/bootstrap-icons.min.css"
+    />
     <link rel="shortcut icon" href="./img/ali.png" type="image/x-icon">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Responsive Student Management Dashboard">
-    <meta name="author" content="Belhadj Merouane">
-    <title>StudentHub · Responsive Dashboard</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="Responsive student management dashboard" />
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors" />
+    <meta name="generator" content="Hugo 0.112.5" />
+    <title>Home page - Responsive Dashboard</title>
 
-    <!-- Bootstrap 5 CSS -->
-    <link href="./css/bootstrap.min.css" rel="stylesheet">
-    
-    <!-- Custom responsive styles -->
+    <link href="./css/bootstrap.min.css" rel="stylesheet" />
+
     <style>
-        /* ---------- GLOBAL RESETS & HELPERS ---------- */
-        * {
-            box-sizing: border-box;
-        }
-        body {
-            overflow-x: hidden;
-            background-color: var(--bs-body-bg);
-            transition: background 0.2s ease;
-        }
-        .b-example-divider {
-            width: 100%;
-            height: 3rem;
-            background-color: rgba(0, 0, 0, 0.1);
-            border: solid rgba(0, 0, 0, 0.15);
-            border-width: 1px 0;
-            box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1), inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
-        }
-        .b-example-vr {
-            flex-shrink: 0;
-            width: 1.5rem;
-            height: 100vh;
-        }
-        .bd-mode-toggle {
-            z-index: 1500;
-        }
-        /* Tooltip custom */
-        .btn[data-bs-toggle="tooltip"] {
-            cursor: pointer;
-        }
-        
-        /* ---------- RESPONSIVE SIDEBAR (mobile + desktop) ---------- */
-        /* desktop: always visible, static */
-        .sidebar {
-            width: 280px;
-            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            z-index: 1050;
-            background-color: #212529 !important;
-            height: 100vh;
-            position: sticky;
-            top: 0;
-            overflow-y: auto;
-        }
-        /* overlay (mobile only) */
-        .sidebar-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.55);
-            z-index: 1040;
-            display: none;
-            backdrop-filter: blur(2px);
-            transition: all 0.2s;
-        }
-        .sidebar-overlay.show {
-            display: block;
-        }
-        
-        /* Mobile styles (<= 768px) */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                top: 0;
-                left: 0;
-                bottom: 0;
-                transform: translateX(-100%);
-                height: 100%;
-                width: 280px;
-                z-index: 1060;
-                box-shadow: 2px 0 12px rgba(0,0,0,0.3);
-                transition: transform 0.25s ease-in-out;
-            }
-            .sidebar.show {
-                transform: translateX(0);
-            }
-            .b-example-vr {
-                display: none;  /* hide vertical divider on mobile */
-            }
-            main.d-flex {
-                flex-direction: column;
-            }
-            /* table container scrolling */
-            .table-wrapper {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-                margin: 0 0.5rem;
-            }
-            .navbar .container-fluid {
-                padding-left: 0.75rem;
-                padding-right: 0.75rem;
-            }
-            .navbar-brand {
-                font-size: 1.25rem;
-            }
-            .action-btns {
-                flex-wrap: nowrap !important;
-            }
-            /* better spacing for cards */
-            section.w-100 {
-                padding: 0 0.25rem;
-            }
-            .table {
-                font-size: 0.85rem;
-                min-width: 600px; /* force horizontal scroll if needed */
-            }
-            .table th, .table td {
-                padding: 0.5rem 0.4rem;
-                vertical-align: middle;
-            }
-        }
-        
-        /* tablet and desktop enhancements */
-        @media (min-width: 769px) {
-            .mobile-menu-toggle {
-                display: none;
-            }
-            .sidebar {
-                transform: translateX(0) !important;
-                position: sticky;
-            }
-            .sidebar-overlay {
-                display: none !important;
-            }
-            .table-wrapper {
-                overflow-x: auto;
-                margin: 0 1rem;
-            }
-            .table {
-                min-width: auto;
-            }
-        }
-        
-        /* small devices extra polish */
-        @media (max-width: 480px) {
-            .sidebar-text {
-                font-size: 0.9rem;
-            }
-            .navbar-brand {
-                font-size: 1rem;
-            }
-            .btn-sm {
-                padding: 0.2rem 0.4rem;
-                font-size: 0.7rem;
-            }
-            .btn-outline-success {
-                padding: 0.25rem 0.6rem;
-                font-size: 0.8rem;
-            }
-            .form-control-sm-custom {
-                width: 140px;
-            }
-        }
-        
-        /* table action buttons: prevent wrap */
-        .action-btns {
-            display: flex;
-            gap: 0.35rem;
-            justify-content: center;
-            flex-wrap: nowrap;
-        }
-        .action-btns .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-        }
-        /* sidebar custom scroll */
-        .sidebar::-webkit-scrollbar {
-            width: 5px;
-        }
-        .sidebar::-webkit-scrollbar-track {
-            background: #2c3034;
-        }
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #6c757d;
-            border-radius: 4px;
-        }
-        
-        /* table hover effect */
-        .table tbody tr:hover {
-            background-color: rgba(var(--bs-primary-rgb), 0.08);
-            transition: 0.1s;
-        }
-        /* brand icon */
-        .navbar-brand i {
-            margin-right: 6px;
-        }
-        /* smooth transitions */
-        a, button {
-            transition: all 0.15s;
-        }
-    </style>
-    <link href="./css/sidebars.css" rel="stylesheet">
-</head>
-<body>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
 
-<!-- Dark/Light mode toggle (floating) -->
-<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
-    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+
+      .b-example-divider {
+        width: 100%;
+        height: 3rem;
+        background-color: rgba(0, 0, 0, 0.1);
+        border: solid rgba(0, 0, 0, 0.15);
+        border-width: 1px 0;
+        box-shadow: inset 0 0.5em 1.5em rgba(0, 0, 0, 0.1),
+          inset 0 0.125em 0.5em rgba(0, 0, 0, 0.15);
+      }
+
+      .b-example-vr {
+        flex-shrink: 0;
+        width: 1.5rem;
+        height: 100vh;
+      }
+
+      .bi {
+        vertical-align: -0.125em;
+        fill: currentColor;
+      }
+
+      .nav-scroller {
+        position: relative;
+        z-index: 2;
+        height: 2.75rem;
+        overflow-y: hidden;
+      }
+
+      .nav-scroller .nav {
+        display: flex;
+        flex-wrap: nowrap;
+        padding-bottom: 1rem;
+        margin-top: -1px;
+        overflow-x: auto;
+        text-align: center;
+        white-space: nowrap;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      .btn-bd-primary {
+        --bd-violet-bg: #712cf9;
+        --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
+
+        --bs-btn-font-weight: 600;
+        --bs-btn-color: var(--bs-white);
+        --bs-btn-bg: var(--bd-violet-bg);
+        --bs-btn-border-color: var(--bd-violet-bg);
+        --bs-btn-hover-color: var(--bs-white);
+        --bs-btn-hover-bg: #6528e0;
+        --bs-btn-hover-border-color: #6528e0;
+        --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
+        --bs-btn-active-color: var(--bs-btn-hover-color);
+        --bs-btn-active-bg: #5a23c8;
+        --bs-btn-active-border-color: #5a23c8;
+      }
+      .bd-mode-toggle {
+        z-index: 1500;
+      }
+
+      /* ========== RESPONSIVE ADDITIONS (sans changer le code existant) ========== */
+      /* Améliore l'affichage sur mobiles et tablettes tout en gardant la structure originale */
+      
+      /* 1. Conteneur principal: passage en wrap sur petits écrans */
+      @media (max-width: 991.98px) {
+        main.d-flex {
+          flex-wrap: wrap !important;
+        }
+        
+        /* Le séparateur vertical devient horizontal ou caché */
+        .b-example-vr {
+          display: none !important;
+        }
+        
+        /* Sidebar prend toute la largeur, devient plus compacte */
+        .sidebar {
+          width: 100% !important;
+          position: relative !important;
+          border-radius: 0 0 12px 12px;
+          margin-bottom: 0.5rem;
+          flex-direction: row !important;
+          flex-wrap: wrap;
+          padding: 0.75rem 1rem !important;
+        }
+        
+        /* Réorganisation du contenu de la sidebar pour mobiles */
+        .sidebar .d-flex.align-items-center.mb-3 {
+          margin-bottom: 0 !important;
+          width: auto;
+        }
+        
+        .sidebar hr {
+          display: none;
+        }
+        
+        /* Ajustement du menu latéral en ligne/hamburger visuel amélioré */
+        .sidebar ul.nav-pills {
+          flex-direction: row !important;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          margin: 0 0.5rem !important;
+          width: auto;
+        }
+        
+        .sidebar ul.nav-pills .nav-item,
+        .sidebar ul.nav-pills li {
+          display: inline-block;
+        }
+        
+        .sidebar .dropdown {
+          margin-left: auto;
+        }
+        
+        /* Cacher le texte du menu sur très petits écrans mais garder icônes */
+        @media (max-width: 576px) {
+          .sidebar-text:not(.fs-4) {
+            display: none;
+          }
+          .sidebar .fs-4.sidebar-text {
+            font-size: 1.25rem !important;
+          }
+          .nav-link .sidebar-text {
+            display: inline-block;
+          }
+          .nav-link .sidebar-text {
+            display: none;
+          }
+          .nav-link i.bi, .nav-link svg {
+            margin-right: 0 !important;
+          }
+          .nav-link {
+            padding: 0.4rem 0.6rem !important;
+          }
+        }
+      }
+      
+      /* 2. Tableau responsive : défilement horizontal sans altérer le code */
+      section.w-100 {
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: thin;
+      }
+      
+      .table {
+        min-width: 680px; /* largeur minimale pour que le contenu reste lisible */
+        white-space: nowrap;
+      }
+      
+      /* Sur les très petits écrans, on peut réduire le padding et la taille police */
+      @media (max-width: 640px) {
+        .table {
+          font-size: 0.85rem;
+        }
+        .table th, .table td {
+          padding: 0.5rem 0.4rem;
+        }
+        .btn-sm {
+          padding: 0.2rem 0.4rem;
+          font-size: 0.7rem;
+        }
+        .btn-sm i {
+          font-size: 0.8rem;
+        }
+      }
+      
+      /* 3. Barre de navigation responsive: empilement sur mobile */
+      @media (max-width: 767.98px) {
+        .navbar .container-fluid {
+          flex-direction: column !important;
+          align-items: stretch !important;
+          gap: 0.75rem;
+        }
+        
+        .navbar-brand {
+          text-align: center;
+          margin-bottom: 0.25rem;
+        }
+        
+        .navbar form.d-flex {
+          width: 100%;
+          justify-content: stretch;
+        }
+        
+        .navbar input.form-control {
+          flex: 1;
+        }
+        
+        .navbar .btn-outline-success {
+          white-space: nowrap;
+        }
+      }
+      
+      /* 4. Ajustement du bouton theme toggle (reste accessible) */
+      @media (max-width: 576px) {
+        .bd-mode-toggle {
+          bottom: 0.5rem !important;
+          right: 0.5rem !important;
+        }
+        .bd-mode-toggle .btn {
+          padding: 0.3rem 0.6rem;
+          font-size: 0.8rem;
+        }
+      }
+      
+      /* 5. Amélioration de la lisibilité des actions (boutons icônes) */
+      .table .d-flex.gap-1 {
+        flex-wrap: nowrap;
+      }
+      
+      /* Éviter que les icônes ne s'écrasent */
+      @media (max-width: 480px) {
+        .table .d-flex.gap-1 {
+          gap: 0.2rem !important;
+        }
+        .btn-sm {
+          padding: 0.2rem 0.35rem;
+        }
+      }
+      
+      /* 6. Sidebar : bouton de fermeture bien positionné sur mobile */
+      @media (max-width: 991.98px) {
+        .sidebar .position-absolute {
+          position: relative !important;
+          top: auto !important;
+          right: auto !important;
+          display: flex;
+          justify-content: flex-end;
+          margin-left: auto;
+        }
+        .sidebar > .d-flex.align-items-center {
+          width: 100%;
+          justify-content: space-between;
+        }
+        .sidebar .position-absolute button {
+          position: relative;
+          right: 0;
+          top: 0;
+        }
+      }
+      
+      /* 7. Éviter le débordement du contenu principal */
+      body {
+        overflow-x: hidden;
+      }
+      
+      /* 8. Rendre les cartes ou éléments bien espacés sur mobile */
+      @media (max-width: 576px) {
+        .mt-5 {
+          margin-top: 1rem !important;
+        }
+        .table-bordered {
+          border-collapse: separate;
+        }
+      }
+      
+      /* 9. Ajustement pour que le profil dropdown reste utilisable */
+      @media (max-width: 991.98px) {
+        .sidebar .dropdown {
+          margin-top: 0;
+        }
+        .sidebar .dropdown-toggle {
+          padding: 0.3rem 0.6rem;
+        }
+        .sidebar .dropdown-toggle strong {
+          font-size: 0.9rem;
+        }
+      }
+      
+      /* 10. Garantir que le contenu du tableau ne coupe pas les actions */
+      .table td:last-child, .table th:last-child {
+        white-space: nowrap;
+      }
+      
+      /* Petite amélioration pour la cohérence visuelle */
+      .sidebar {
+        transition: all 0.2s ease;
+      }
+      
+      /* Maintien du style original mais responsive */
+      .navbar-brand {
+        font-weight: 500;
+      }
+      
+      /* Optimisation pour les écrans moyens (tablettes) */
+      @media (min-width: 768px) and (max-width: 1024px) {
+        .table {
+          min-width: 100%;
+          white-space: normal;
+        }
+        .table td, .table th {
+          white-space: normal;
+          word-break: break-word;
+        }
+        .sidebar ul.nav-pills {
+          flex-direction: column !important;
+        }
+        .sidebar .position-absolute {
+          position: absolute !important;
+        }
+      }
+    </style>
+
+    <!-- Custom styles for this template -->
+    <link href="./css/sidebars.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/myStyle.css" />
+  </head>
+  <body>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="check2" viewBox="0 0 16 16">
+        <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z" />
+      </symbol>
+      <symbol id="circle-half" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z" />
+      </symbol>
+      <symbol id="moon-stars-fill" viewBox="0 0 16 16">
+        <path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z" />
+        <path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z" />
+      </symbol>
+      <symbol id="sun-fill" viewBox="0 0 16 16">
+        <path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z" />
+      </symbol>
+    </svg>
+
+    <div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle">
+      <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" aria-expanded="false" data-bs-toggle="dropdown" aria-label="Toggle theme (auto)">
         <svg class="bi my-1 theme-icon-active" width="1em" height="1em"><use href="#circle-half"></use></svg>
         <span class="visually-hidden" id="bd-theme-text">Toggle theme</span>
-    </button>
-    <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
+      </button>
+      <ul class="dropdown-menu dropdown-menu-end shadow" aria-labelledby="bd-theme-text">
         <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="light" aria-pressed="false"><svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#sun-fill"></use></svg>Light<svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg></button></li>
         <li><button type="button" class="dropdown-item d-flex align-items-center" data-bs-theme-value="dark" aria-pressed="false"><svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#moon-stars-fill"></use></svg>Dark<svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg></button></li>
         <li><button type="button" class="dropdown-item d-flex align-items-center active" data-bs-theme-value="auto" aria-pressed="true"><svg class="bi me-2 opacity-50 theme-icon" width="1em" height="1em"><use href="#circle-half"></use></svg>Auto<svg class="bi ms-auto d-none" width="1em" height="1em"><use href="#check2"></use></svg></button></li>
-    </ul>
-</div>
-
-<!-- SVG Icons (hidden) -->
-<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
-    <symbol id="check2" viewBox="0 0 16 16"><path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/></symbol>
-    <symbol id="circle-half" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/></symbol>
-    <symbol id="moon-stars-fill" viewBox="0 0 16 16"><path d="M6 .278a.768.768 0 0 1 .08.858 7.208 7.208 0 0 0-.878 3.46c0 4.021 3.278 7.277 7.318 7.277.527 0 1.04-.055 1.533-.16a.787.787 0 0 1 .81.316.733.733 0 0 1-.031.893A8.349 8.349 0 0 1 8.344 16C3.734 16 0 12.286 0 7.71 0 4.266 2.114 1.312 5.124.06A.752.752 0 0 1 6 .278z"/><path d="M10.794 3.148a.217.217 0 0 1 .412 0l.387 1.162c.173.518.579.924 1.097 1.097l1.162.387a.217.217 0 0 1 0 .412l-1.162.387a1.734 1.734 0 0 0-1.097 1.097l-.387 1.162a.217.217 0 0 1-.412 0l-.387-1.162A1.734 1.734 0 0 0 9.31 6.593l-1.162-.387a.217.217 0 0 1 0-.412l1.162-.387a1.734 1.734 0 0 0 1.097-1.097l.387-1.162zM13.863.099a.145.145 0 0 1 .274 0l.258.774c.115.346.386.617.732.732l.774.258a.145.145 0 0 1 0 .274l-.774.258a1.156 1.156 0 0 0-.732.732l-.258.774a.145.145 0 0 1-.274 0l-.258-.774a1.156 1.156 0 0 0-.732-.732l-.774-.258a.145.145 0 0 1 0-.274l.774-.258c.346-.115.617-.386.732-.732L13.863.1z"/></symbol>
-    <symbol id="sun-fill" viewBox="0 0 16 16"><path d="M8 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM8 0a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 0zm0 13a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-1 0v-2A.5.5 0 0 1 8 13zm8-5a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2a.5.5 0 0 1 .5.5zM3 8a.5.5 0 0 1-.5.5h-2a.5.5 0 0 1 0-1h2A.5.5 0 0 1 3 8zm10.657-5.657a.5.5 0 0 1 0 .707l-1.414 1.415a.5.5 0 1 1-.707-.708l1.414-1.414a.5.5 0 0 1 .707 0zm-9.193 9.193a.5.5 0 0 1 0 .707L3.05 13.657a.5.5 0 0 1-.707-.707l1.414-1.414a.5.5 0 0 1 .707 0zm9.193 2.121a.5.5 0 0 1-.707 0l-1.414-1.414a.5.5 0 0 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .707zM4.464 4.465a.5.5 0 0 1-.707 0L2.343 3.05a.5.5 0 1 1 .707-.707l1.414 1.414a.5.5 0 0 1 0 .708z"/></symbol>
-    <symbol id="home" viewBox="0 0 16 16"><path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/></symbol>
-    <symbol id="people-circle" viewBox="0 0 16 16"><path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z"/><path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z"/></symbol>
-</svg>
-
-<!-- MAIN LAYOUT -->
-<main class="d-flex flex-nowrap position-relative">
-    <!-- SIDEBAR (responsive + toggle) -->
-    <div id="sidebarId" class="sidebar d-flex flex-column flex-shrink-0 p-3 text-bg-dark">
-        <div class="d-flex justify-content-between align-items-center mb-2">
-            <a href="/" class="d-flex align-items-center text-white text-decoration-none">
-                <i class="bi bi-lightning-charge fs-4 me-2"></i>
-                <span class="fs-4 sidebar-text">Menu</span>
-            </a>
-            <!-- close button (visible on all, but especially mobile) -->
-            <button class="btn btn-sm btn-outline-light d-md-none" onclick="toggleSidebar()" type="button">
-                <i class="bi bi-x-lg"></i>
-            </button>
-            <!-- desktop close icon (optional but aligned) -->
-            <button class="btn btn-sm btn-outline-secondary d-none d-md-block" onclick="toggleSidebar()" style="opacity: 0.7;" type="button">
-                <i class="bi bi-arrow-left-short"></i>
-            </button>
-        </div>
-        <hr>
-        <ul class="nav nav-pills flex-column mb-auto">
-            <li class="nav-item">
-                <a href="/" class="nav-link active" aria-current="page">
-                    <svg class="bi pe-none me-2" width="20" height="20"><use xlink:href="#home"/></svg>
-                    <span class="sidebar-text">Titres</span>
-                </a>
-            </li>
-            <li>
-                <a href="./user/add.html" class="nav-link text-white">
-                    <svg class="bi pe-none me-2" width="20" height="20"><use xlink:href="#people-circle"/></svg>
-                    <span class="sidebar-text">Ajouter étudiant</span>
-                </a>
-            </li>
-        </ul>
-        <hr>
-        <div class="dropdown">
-            <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="./img/belhadj.JPG" alt="avatar" width="34" height="34" class="rounded-circle me-2 border border-light">
-                <strong class="sidebar-text">Belhadj Merouane</strong>
-            </a>
-            <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-                <li><a class="dropdown-item" href="#">New project...</a></li>
-                <li><a class="dropdown-item" href="#">Settings</a></li>
-                <li><a class="dropdown-item" href="#">Profile</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="#">Sign out</a></li>
-            </ul>
-        </div>
+      </ul>
     </div>
 
-    <!-- overlay for mobile (click to close) -->
-    <div id="sidebarOverlay" class="sidebar-overlay" onclick="toggleSidebar()"></div>
+    <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
+      <symbol id="home" viewBox="0 0 16 16">
+        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+      </symbol>
+      <symbol id="people-circle" viewBox="0 0 16 16">
+        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0z" />
+        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8zm8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1z" />
+      </symbol>
+    </svg>
 
-    <!-- vertical divider (hidden on mobile) -->
-    <div class="b-example-divider b-example-vr"></div>
+    <main class="d-flex flex-nowrap">
+      <div id="sidebarId" class="position-relative d-flex flex-column flex-shrink-0 p-3 text-bg-dark sidebar">
+        <span style="right: 10px; top: 2px" class="position-absolute">
+          <button class="btn" onclick="toggleSidebar()">
+            <i class="bi bi-x-circle"></i>
+          </button>
+        </span>
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-white text-decoration-none">
+          <i class="bi bi-lightning-charge"></i>
+          <span class="fs-4 sidebar-text">Menu</span>
+        </a>
+        <hr />
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link active" aria-current="page">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#home" /></svg>
+              <span class="sidebar-text"> Titres </span>
+            </a>
+          </li>
+          <li>
+            <a href="./user/add.html" class="nav-link text-white">
+              <svg class="bi pe-none me-2" width="16" height="16"><use xlink:href="#people-circle" /></svg>
+              <span class="sidebar-text"> Ajouter etudiant </span>
+            </a>
+          </li>
+        </ul>
+        <hr />
+        <div class="dropdown">
+          <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="./img/belhadj.JPG" alt="" width="32" height="32" class="rounded-circle me-2" />
+            <strong class="sidebar-text">Belhadj Merouane</strong>
+          </a>
+          <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+            <li><a class="dropdown-item" href="#">New project...</a></li>
+            <li><a class="dropdown-item" href="#">Settings</a></li>
+            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><hr class="dropdown-divider" /></li>
+            <li><a class="dropdown-item" href="#">Sign out</a></li>
+          </ul>
+        </div>
+      </div>
 
-    <!-- MAIN CONTENT SECTION (responsive) -->
-    <section class="w-100">
-        <!-- NAVBAR with hamburger (mobile only) -->
-        <nav class="navbar bg-body-tertiary py-2 shadow-sm">
-            <div class="container-fluid justify-content-between">
-                <div class="d-flex align-items-center gap-2">
-                    <!-- mobile menu toggle button -->
-                    <button class="btn btn-outline-secondary mobile-menu-toggle d-md-none" type="button" onclick="toggleSidebar()" aria-label="Menu">
-                        <i class="bi bi-list fs-4"></i>
-                    </button>
-                    <a class="navbar-brand fw-semibold fs-4 mb-0" href="#">
-                        <i class="bi bi-mortarboard-fill text-primary"></i> 
-                        Cours POO : Mr BELHADJ
-                    </a>
-                </div>
-                <form action="/search" method="post" class="d-flex" role="search">
-                    <input name="searchText" class="form-control me-2" type="search" placeholder="Rechercher..." aria-label="Search">
-                    <button class="btn btn-outline-success" type="submit"><i class="bi bi-search"></i> <span class="d-none d-sm-inline">Search</span></button>
-                </form>
-            </div>
+      <div class="b-example-divider b-example-vr"></div>
+
+      <section class="w-100">
+        <nav class="navbar bg-body-tertiary">
+          <div class="container-fluid justify-content-center justify-content-md-between">
+            <a class="navbar-brand fw-medium fs-3 mb-1 mb-md-0">Cours POO : Mr BELHADJ</a>
+            <form action="/search" method="post" class="d-flex" role="search">
+              <input name="searchText" class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
+              <button class="btn btn-outline-success" type="submit">Search</button>
+            </form>
+          </div>
         </nav>
 
-        <!-- responsive table wrapper (horizontal scroll on mobile) -->
-        <div class="table-wrapper mt-4 mt-md-5">
-            <table class="table table-striped table-bordered text-center align-middle mb-5" style="min-width: 500px;">
-                <thead class="table-dark">
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Nom et Prénom</th>
-                        <th scope="col">Sexe</th>
-                        <th scope="col">Spécialité</th>
-                        <th scope="col">Âge</th>
-                        <th scope="col">Last updated</th>
-                        <th scope="col" class="text-nowrap">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Sample data (dynamic simulation) -->
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Benali Sarah</td>
-                        <td>Féminin</td>
-                        <td>Informatique</td>
-                        <td>21</td>
-                        <td>2 days ago</td>
-                        <td class="text-nowrap">
-                            <div class="action-btns">
-                                <a class="btn btn-primary btn-sm" href="./user/1" data-bs-toggle="tooltip" title="Voir détails"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" href="./edit/1" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil"></i></a>
-                                <form action="/delete/1?_method=DELETE" method="post" class="d-inline-block">
-                                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Khelifa Rayan</td>
-                        <td>Masculin</td>
-                        <td>Mathématiques</td>
-                        <td>22</td>
-                        <td>5 days ago</td>
-                        <td class="text-nowrap">
-                            <div class="action-btns">
-                                <a class="btn btn-primary btn-sm" href="./user/2" data-bs-toggle="tooltip" title="Voir détails"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" href="./edit/2" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil"></i></a>
-                                <form action="/delete/2?_method=DELETE" method="post" class="d-inline-block">
-                                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Zeroual Lina</td>
-                        <td>Féminin</td>
-                        <td>Physique</td>
-                        <td>20</td>
-                        <td>1 week ago</td>
-                        <td class="text-nowrap">
-                            <div class="action-btns">
-                                <a class="btn btn-primary btn-sm" href="./user/3" data-bs-toggle="tooltip" title="Voir détails"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" href="./edit/3" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil"></i></a>
-                                <form action="/delete/3?_method=DELETE" method="post" class="d-inline-block">
-                                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">4</th>
-                        <td>Mansouri Adam</td>
-                        <td>Masculin</td>
-                        <td>Informatique</td>
-                        <td>23</td>
-                        <td>yesterday</td>
-                        <td class="text-nowrap">
-                            <div class="action-btns">
-                                <a class="btn btn-primary btn-sm" href="./user/4" data-bs-toggle="tooltip" title="Voir détails"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" href="./edit/4" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil"></i></a>
-                                <form action="/delete/4?_method=DELETE" method="post" class="d-inline-block">
-                                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">5</th>
-                        <td>Haddad Chaima</td>
-                        <td>Féminin</td>
-                        <td>Biologie</td>
-                        <td>21</td>
-                        <td>3 days ago</td>
-                        <td class="text-nowrap">
-                            <div class="action-btns">
-                                <a class="btn btn-primary btn-sm" href="./user/5" data-bs-toggle="tooltip" title="Voir détails"><i class="bi bi-eye"></i></a>
-                                <a class="btn btn-primary btn-sm" href="./edit/5" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil"></i></a>
-                                <form action="/delete/5?_method=DELETE" method="post" class="d-inline-block">
-                                    <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash"></i></button>
-                                </form>
-                            </div>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <!-- Optional: pagination placeholder for better UX -->
-        <div class="d-flex justify-content-center mt-2 mb-4">
-            <nav aria-label="Page navigation">
-                <ul class="pagination pagination-sm">
-                    <li class="page-item disabled"><a class="page-link" href="#">Précédent</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Suivant</a></li>
-                </ul>
-            </nav>
-        </div>
-    </section>
-</main>
-
-<!-- Scripts -->
-<script src="./js/bootstrap.bundle.min.js"></script>
-<!-- custom responsive sidebar logic + tooltips init -->
-<script>
-    // Toggle sidebar function (mobile & optional desktop collapse)
-    const sidebar = document.getElementById('sidebarId');
-    const overlay = document.getElementById('sidebarOverlay');
-
-    function toggleSidebar() {
-        if (!sidebar) return;
-        const isMobile = window.innerWidth <= 768;
-        if (isMobile) {
-            sidebar.classList.toggle('show');
-            if (overlay) overlay.classList.toggle('show');
-            // prevent body scroll when sidebar open
-            if (sidebar.classList.contains('show')) {
-                document.body.style.overflow = 'hidden';
-            } else {
-                document.body.style.overflow = '';
-            }
-        } else {
-            // Desktop behavior: optional collapse/expand minimal width (optional)
-            // we can just make it compact or keep full, but for UX: let sidebar toggle width? 
-            // but per requirement we keep it as responsive; we add mini mode if needed
-            // for desktop, just toggle a small class to reduce width? Not mandatory, but elegant.
-            // However user expects responsiveness: on desktop sidebar is always visible but we can allow collapse to icon?
-            // To align with modern dashboards, we'll add a desktop minimal mode: 
-            // toggle class "collapsed" on sidebar to shrink to 70px (icons only)
-            sidebar.classList.toggle('desktop-collapsed');
-            if (sidebar.classList.contains('desktop-collapsed')) {
-                sidebar.style.width = '72px';
-                document.querySelectorAll('.sidebar-text').forEach(el => el.style.display = 'none');
-                document.querySelector('.sidebar hr')?.setAttribute('style', 'margin: 0.5rem 0');
-            } else {
-                sidebar.style.width = '280px';
-                document.querySelectorAll('.sidebar-text').forEach(el => el.style.display = '');
-            }
+        <table style="width: 99%" class="text-center mx-auto table mt-5 table-striped table-bordered">
+          <thead>
+            <tr>
+              <th scope="col">#</th>
+              <th scope="col">Nom et Prenom</th>
+              <th scope="col">Sexe</th>
+              <th scope="col">Specialite</th>
+              <th scope="col">Age</th>
+              <th scope="col">Last updated</th>
+              <!-- Colonne Action réduite au minimum -->
+              <th scope="col" class="text-nowrap" style="width: 1%;">Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% arr.forEach((item, index) => { %>
+              <tr>
+                <th scope="row"><%= index+1 %></th>
+                <td><%= item.nom %> <%= item.prenom %></td>
+                <td><%= item.sexe %></td>
+                <td><%= item.specialite %></td>
+                <td><%= item.age %></td>
+                <td>1 days ago</td>
+                <!-- Cellule Action avec largeur minimale et contenu non coupé -->
+                <td class="text-nowrap align-middle" style="width: 1%;">
+                  <div class="d-flex gap-1 justify-content-center">
+                    <a class="btn btn-primary btn-sm" href="./user/<%= item._id %>" data-bs-toggle="tooltip" data-bs-title="Voir les détails">
+                      <i class="bi bi-eye"></i>
+                    </a>
+                    <a class="btn btn-primary btn-sm" href="./edit/<%= item._id %>" data-bs-toggle="tooltip" data-bs-title="Modifier">
+                      <i class="bi bi-pencil"></i>
+                    </a>
+                    <form action="/delete/<%= item._id %>?_method=DELETE" method="post" class="d-inline-block">
+                      <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-title="Supprimer">
+                        <i class="bi bi-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </section>
+    </main>
+    <script src="./js/bootstrap.bundle.min.js"></script>
+    <script src="./js/sidebars.js"></script>
+    <script src="./js/main.js"></script>
+    <!-- Petit script additionnel pour améliorer l'expérience responsive sans altérer le code existant -->
+    <script>
+      (function() {
+        // Garantir que les tooltips Bootstrap fonctionnent même après redimensionnement (optionnel)
+        if (typeof bootstrap !== 'undefined' && bootstrap.Tooltip) {
+          var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+          tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl);
+          });
         }
-    }
-
-    // close sidebar when window resizes from mobile to desktop
-    window.addEventListener('resize', function() {
-        if (window.innerWidth > 768) {
-            if (sidebar && sidebar.classList.contains('show')) {
-                sidebar.classList.remove('show');
-                if (overlay) overlay.classList.remove('show');
-                document.body.style.overflow = '';
-            }
-            // ensure desktop width is consistent (remove inline width if needed)
-            if (sidebar && !sidebar.classList.contains('desktop-collapsed')) {
-                sidebar.style.width = '';
-            }
-        } else {
-            // on mobile, if desktop-collapsed class exists, remove it and reset text
-            if (sidebar && sidebar.classList.contains('desktop-collapsed')) {
-                sidebar.classList.remove('desktop-collapsed');
-                sidebar.style.width = '';
-                document.querySelectorAll('.sidebar-text').forEach(el => el.style.display = '');
-            }
+        
+        // Assure que le bouton de fermeture de la sidebar fonctionne avec la réactivité
+        // La fonction toggleSidebar() est déjà définie dans sidebars.js, on ne fait que garantir qu'en mode mobile
+        // la sidebar peut être refermée proprement. Aucun conflit.
+        if (window.innerWidth < 992) {
+          // Option: on peut ajouter une classe pour éviter un overflow si nécessaire mais on laisse le comportement existant
+          document.querySelector('main.d-flex')?.classList.remove('flex-nowrap');
+          document.querySelector('main.d-flex')?.classList.add('flex-wrap');
         }
-    });
-
-    // initial tooltips activation
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-    tooltipTriggerList.forEach(function (tooltipTriggerEl) {
-        new bootstrap.Tooltip(tooltipTriggerEl);
-    });
-
-    // close sidebar on escape key
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && window.innerWidth <= 768 && sidebar && sidebar.classList.contains('show')) {
-            toggleSidebar();
-        }
-    });
-
-    // optional: smooth close when clicking on nav links (mobile)
-    if (sidebar) {
-        const navLinks = sidebar.querySelectorAll('.nav-link');
-        navLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                if (window.innerWidth <= 768) {
-                    toggleSidebar();
-                }
-            });
+        
+        // Écouter le redimensionnement pour maintenir la flexibilité sans casser le layout
+        window.addEventListener('resize', function() {
+          const mainEl = document.querySelector('main.d-flex');
+          if (window.innerWidth < 992) {
+            mainEl?.classList.remove('flex-nowrap');
+            mainEl?.classList.add('flex-wrap');
+          } else {
+            mainEl?.classList.remove('flex-wrap');
+            mainEl?.classList.add('flex-nowrap');
+          }
         });
-    }
-    
-    // ensure no body overflow left after orientation change
-    window.addEventListener('orientationchange', function() {
-        if (window.innerWidth > 768) {
-            document.body.style.overflow = '';
-        }
-    });
-    
-    // small adjustment for desktop close button
-    const desktopCloseBtn = document.querySelector('.d-none.d-md-block');
-    if (desktopCloseBtn) {
-        desktopCloseBtn.addEventListener('click', (e) => {
-            if (window.innerWidth > 768) {
-                // collapse / expand desktop sidebar text visibility
-                toggleSidebar();
-            }
-        });
-    }
-    
-    //  any dynamic content need to refresh (just to be safe)
-    console.log("Responsive dashboard ready — sidebar and table fully responsive");
-</script>
-<!-- Additional custom scripts from original project (optional but kept for compatibility) -->
-<script src="./js/sidebars.js"></script>
-<script src="./js/main.js"></script>
-</body>
+      })();
+    </script>
+  </body>
 </html>
