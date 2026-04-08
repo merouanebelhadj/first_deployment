@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="fr" data-bs-theme="auto">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
+    <title>EduManage | Tableau sans radius</title>
+    <!-- Bootstrap 5 + Icons + Google Fonts -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        :root {
+            --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+            --card-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.02);
+            --sidebar-bg-light: rgba(255, 255, 255, 0.98);
+            --sidebar-bg-dark: #0f172a;
+        }
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+        }
+        [data-bs-theme="dark"] body {
+            background: #0b1120;
+        }
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #e2e8f0; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+
+        /* SIDEBAR - responsive */
+        .sidebar {
+            background: var(--sidebar-bg-light);
+            border-right: 1px solid rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+            width: 280px;
+            position: fixed;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 1050;
+            transform: translateX(0);
+            overflow-y: auto;
+        }
+        [data-bs-theme="dark"] .sidebar {
+            background: var(--sidebar-bg-dark);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                box-shadow: 2px 0 12px rgba(0,0,0,0.1);
+            }
+            .sidebar.show {
+                transform: translateX(0);
+            }
+            .main-content {
+                width: 100%;
+                margin-left: 0 !important;
+            }
+        }
+        @media (min-width: 769px) {
+            .main-content {
+                margin-left: 280px;
+                width: calc(100% - 280px);
+            }
+            .sidebar {
+                transform: translateX(0) !important;
+            }
+        }
+        .sidebar .nav-link {
+            border-radius: 14px;
+            margin: 6px 12px;
+            padding: 10px 16px;
+            font-weight: 500;
+            transition: all 0.2s;
+            color: #1e293b;
+        }
+        [data-bs-theme="dark"] .sidebar .nav-link { color: #e2e8f0; }
+        .sidebar .nav-link.active {
+            background: var(--primary-gradient);
+            color: white !important;
+            box-shadow: 0 6px 12px -8px rgba(79, 70, 229, 0.4);
+        }
+        .sidebar .nav-link:not(.active):hover {
+            background: rgba(79, 70, 229, 0.08);
+            transform: translateX(4px);
+        }
+        .profile-card {
+            border-top: 1px solid rgba(0,0,0,0.05);
+            padding-top: 12px;
+        }
+        .main-content {
+            transition: margin-left 0.3s ease;
+            background: #f8fafc;
+            min-height: 100vh;
+        }
+        [data-bs-theme="dark"] .main-content { background: #0f172a; }
+        .navbar-custom {
+            background: rgba(255,255,255,0.75);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            padding: 0.7rem 1rem;
+        }
+        [data-bs-theme="dark"] .navbar-custom {
+            background: rgba(15, 23, 42, 0.85);
+            border-bottom-color: rgba(255,255,255,0.05);
+        }
+        .brand-title {
+            background: linear-gradient(120deg, #4F46E5, #A855F7);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            font-weight: 700;
+        }
+        .search-input {
+            border-radius: 60px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            transition: 0.2s;
+        }
+        .btn-search {
+            border-radius: 60px;
+            background: #4F46E5;
+            border: none;
+            color: white;
+            font-weight: 500;
+            padding: 0.4rem 1.2rem;
+            white-space: nowrap;
+        }
+        /* TABLE SANS AUCUN RADIUS */
+        .table-wrapper {
+            background: white;
+            box-shadow: var(--card-shadow);
+            overflow-x: auto;
+            border: 1px solid rgba(0,0,0,0.03);
+            border-radius: 0 !important;   /* radius supprimé */
+        }
+        [data-bs-theme="dark"] .table-wrapper {
+            background: #1e293b;
+            border-color: #334155;
+        }
+        .custom-table {
+            min-width: 600px;
+            width: 100%;
+            border-radius: 0 !important;
+        }
+        .custom-table thead th {
+            background: #f9fafb;
+            padding: 1rem 0.8rem;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+        [data-bs-theme="dark"] .custom-table thead th { background: #0f172a; color: #cbd5e1; }
+        .custom-table tbody tr:hover { background: rgba(79, 70, 229, 0.03); }
+        .badge-specialite {
+            background: #eef2ff;
+            color: #4F46E5;
+            padding: 5px 12px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .action-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+        .btn-icon-sm {
+            width: 34px; height: 34px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            border: none;
+            transition: 0.2s;
+        }
+        .btn-view { background: #eef2ff; color: #4F46E5; }
+        .btn-view:hover { background: #4F46E5; color: white; transform: translateY(-2px); }
+        .btn-edit { background: #fff3e3; color: #f97316; }
+        .btn-edit:hover { background: #f97316; color: white; transform: translateY(-2px); }
+        .btn-danger-custom { background: #fee2e2; color: #dc2626; }
+        .btn-danger-custom:hover { background: #dc2626; color: white; transform: translateY(-2px); }
+        .stats-badge {
+            background: white;
+            border-radius: 60px;
+            padding: 6px 18px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .btn-add-quick {
+            background: var(--primary-gradient);
+            border: none;
+            border-radius: 40px;
+            padding: 8px 22px;
+            font-weight: 600;
+            box-shadow: 0 4px 8px rgba(79,70,229,0.2);
+            white-space: nowrap;
+        }
+        .avatar-placeholder {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(145deg, #818cf8, #4F46E5);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        @media (max-width: 576px) {
+            .stats-badge { font-size: 0.75rem; padding: 4px 12px; }
+            .btn-add-quick { padding: 6px 16px; font-size: 0.8rem; }
+            .navbar-custom .container-fluid { flex-direction: column; align-items: stretch; gap: 10px; }
+            .search-input { width: 100%; }
+            .btn-search { width: 100%; margin-top: 6px; }
+            .page-header { flex-direction: column; align-items: flex-start; }
+        }
+        .modal-content { border-radius: 28px; border: none; }
+        .form-control, .form-select { border-radius: 16px; }
+        .btn-primary-custom {
+            background: #4F46E5;
+            border: none;
+            border-radius: 40px;
+            padding: 0.6rem 1.2rem;
+            font-weight: 600;
+        }
+        .toggle-sidebar-btn {
+            background: transparent;
+            border: none;
+            font-size: 1.6rem;
+            color: #4F46E5;
+            margin-right: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Theme toggle -->
+<div class="dropdown position-fixed bottom-0 end-0 mb-3 me-3 bd-mode-toggle z-3">
+    <button class="btn btn-bd-primary py-2 dropdown-toggle d-flex align-items-center" id="bd-theme" type="button" data-bs-toggle="dropdown">
+        <i class="bi bi-circle-half me-1"></i> Thème
+    </button>
+    <ul class="dropdown-menu dropdown-menu-end shadow">
+        <li><button type="button" class="dropdown-item" data-bs-theme-value="light"><i class="bi bi-sun-fill me-2"></i>Clair</button></li>
+        <li><button type="button" class="dropdown-item" data-bs-theme-value="dark"><i class="bi bi-moon-stars-fill me-2"></i>Sombre</button></li>
+        <li><button type="button" class="dropdown-item active" data-bs-theme-value="auto"><i class="bi bi-circle-half me-2"></i>Auto</button></li>
+    </ul>
+</div>
+
+<!-- SIDEBAR -->
+<div id="sidebarId" class="sidebar d-flex flex-column p-3">
+    <div class="d-flex justify-content-between align-items-center d-md-none mb-3">
+        <span class="fs-5 fw-bold">Menu</span>
+        <button class="btn-close" onclick="closeSidebar()"></button>
+    </div>
+    <a href="#" class="d-flex align-items-center gap-2 mb-3 text-decoration-none">
+        <i class="bi bi-mortarboard-fill fs-3" style="color: #4F46E5;"></i>
+        <span class="fs-4 fw-semibold" style="background: linear-gradient(135deg, #4F46E5, #A855F7); background-clip: text; -webkit-background-clip: text; color: transparent;">EduManage</span>
+    </a>
+    <hr>
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item"><a href="#" class="nav-link active" id="nav-home"><i class="bi bi-people-fill me-2"></i>Étudiants</a></li>
+        <li><a href="#" class="nav-link" id="nav-add-quick"><i class="bi bi-person-plus-fill me-2"></i>Ajouter étudiant</a></li>
+        <li><a href="#" class="nav-link"><i class="bi bi-bar-chart-steps me-2"></i>Statistiques</a></li>
+    </ul>
+    <hr>
+    <div class="dropdown profile-card">
+        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" data-bs-toggle="dropdown">
+            <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-2" style="width: 38px; height: 38px; background: var(--primary-gradient);">MB</div>
+            <strong>Belhadj Merouane</strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+            <li><a class="dropdown-item" href="#"><i class="bi bi-person-badge me-2"></i>Profil</a></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-gear me-2"></i>Paramètres</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item" href="#"><i class="bi bi-box-arrow-right me-2"></i>Déconnexion</a></li>
+        </ul>
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="main-content">
+    <nav class="navbar navbar-custom sticky-top">
+        <div class="container-fluid d-flex justify-content-between flex-wrap">
+            <div class="d-flex align-items-center">
+                <button class="toggle-sidebar-btn d-md-none" onclick="toggleSidebarMobile()">
+                    <i class="bi bi-list"></i>
+                </button>
+                <span class="navbar-brand fw-bold fs-3 brand-title"><i class="bi bi-code-slash me-1"></i>Cours POO</span>
+                <span class="badge bg-light text-dark rounded-pill px-3 py-1 ms-2">Mr BELHADJ</span>
+            </div>
+            <div class="d-flex gap-2 w-auto flex-wrap flex-sm-nowrap">
+                <input type="text" id="searchInput" class="form-control search-input" placeholder="Rechercher nom/prénom...">
+                <button class="btn btn-search" id="searchBtn"><i class="bi bi-search"></i> Chercher</button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid px-3 px-md-4 px-lg-5 py-4">
+        <div class="page-header mb-4 d-flex justify-content-between align-items-center flex-wrap gap-3">
+            <div>
+                <h2 class="fw-semibold mb-1"><i class="bi bi-table me-2"></i>Liste des étudiants</h2>
+                
+            </div>
+            <div class="d-flex gap-3">
+                <div class="stats-badge"><i class="bi bi-person-standing-dress"></i> <span id="studentCount">0</span> inscrits</div>
+                <button class="btn btn-add-quick text-white" id="openAddModalBtn"><i class="bi bi-plus-lg me-1"></i> Nouveau</button>
+            </div>
+        </div>
+
+        <!-- Table wrapper sans radius -->
+        <div class="table-wrapper">
+            <div class="table-responsive">
+                <table class="custom-table table align-middle mb-0">
+                    <thead>
+                        <tr><th>#</th><th>Nom complet</th><th>Sexe</th><th>Spécialité</th><th>Âge</th><th>Activité</th><th>Actions</th></tr>
+                    </thead>
+                    <tbody id="studentTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+        <div class="text-center text-muted small mt-3"><i class="bi bi-database"></i> Données sauvegardées localement</div>
+    </div>
+</div>
+
+<!-- MODAL ADD/EDIT -->
+<div class="modal fade" id="studentModal" data-bs-backdrop="static" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="modal-title fw-bold" id="modalTitle">Ajouter un étudiant</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="studentForm">
+                    <input type="hidden" id="studentId">
+                    <div class="mb-3"><label class="form-label fw-semibold">Nom *</label><input type="text" class="form-control" id="nom" required></div>
+                    <div class="mb-3"><label class="form-label fw-semibold">Prénom *</label><input type="text" class="form-control" id="prenom" required></div>
+                    <div class="mb-3"><label class="form-label fw-semibold">Sexe</label><select class="form-select" id="sexe"><option>Homme</option><option>Femme</option></select></div>
+                    <div class="mb-3"><label class="form-label fw-semibold">Spécialité</label><input type="text" class="form-control" id="specialite" placeholder="ex: Informatique" value="Informatique"></div>
+                    <div class="mb-3"><label class="form-label fw-semibold">Âge</label><input type="number" class="form-control" id="age" min="17" max="99" value="21"></div>
+                </form>
+            </div>
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-secondary rounded-pill" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary-custom text-white" id="saveStudentBtn">Enregistrer</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL VIEW -->
+<div class="modal fade" id="viewModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header"><h5 class="modal-title">Détails étudiant</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+            <div class="modal-body" id="viewDetails"></div>
+            <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button></div>
+        </div>
+    </div>
+</div>
+
+<script>
+    //-- ---------- DATA ----------  
+    let students = [];
+    let nextId = 1;
+    let currentFilter = "";
+
+    function loadData() {
+        const stored = localStorage.getItem("eduManage_students");
+        if(stored) {
+            students = JSON.parse(stored);
+            nextId = students.length ? Math.max(...students.map(s=>s.id)) + 1 : 1;
+        } else {
+            students = [
+                { id: 1, nom: "Regami", prenom: "Safaa", sexe: "Femme", specialite: "Informatique", age: 22, lastUpdated: new Date().toLocaleDateString() },
+                { id: 2, nom: "talai", prenom: "Mehdi", sexe: "Homme", specialite: "Mathématiques", age: 21, lastUpdated: new Date().toLocaleDateString() },
+                { id: 3, nom: "Hamza", prenom: "Ines", sexe: "Femme", specialite: "Physique", age: 23, lastUpdated: new Date().toLocaleDateString() }
+            ];
+            nextId = 4;
+            saveToLocal();
+        }
+        renderTable();
+    }
+
+    function saveToLocal() { localStorage.setItem("eduManage_students", JSON.stringify(students)); }
+
+    function addStudent(data) {
+        const newStudent = { ...data, id: nextId++, lastUpdated: new Date().toLocaleDateString() };
+        students.push(newStudent);
+        saveToLocal();
+        renderTable();
+    }
+    function editStudent(id, updated) {
+        const idx = students.findIndex(s => s.id == id);
+        if(idx !== -1) {
+            students[idx] = { ...students[idx], ...updated, lastUpdated: new Date().toLocaleDateString() };
+            saveToLocal();
+            renderTable();
+        }
+    }
+    function deleteStudent(id) {
+        if(confirm("⚠️ Supprimer définitivement cet étudiant ?")) {
+            students = students.filter(s => s.id != id);
+            saveToLocal();
+            renderTable();
+        }
+    }
+
+    function renderTable() {
+        let filtered = students;
+        if(currentFilter.trim() !== "") {
+            const term = currentFilter.toLowerCase();
+            filtered = students.filter(s => s.nom.toLowerCase().includes(term) || s.prenom.toLowerCase().includes(term));
+        }
+        const tbody = document.getElementById("studentTableBody");
+        if(filtered.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-5"><i class="bi bi-inbox fs-1"></i><br>Aucun étudiant trouvé</td></tr>`;
+            document.getElementById("studentCount").innerText = students.length;
+            return;
+        }
+        let html = "";
+        filtered.forEach((s, idx) => {
+            const sexIcon = s.sexe === 'Homme' ? '<i class="bi bi-gender-male text-primary"></i>' : '<i class="bi bi-gender-female text-danger"></i>';
+            html += `<tr>
+                <td class="fw-semibold">${idx+1}</td>
+                <td><div class="d-flex align-items-center gap-2"><div class="avatar-placeholder">${s.nom.charAt(0)}</div><span>${s.nom} ${s.prenom}</span></div></td>
+                <td>${sexIcon} ${s.sexe}</td>
+                <td><span class="badge-specialite"><i class="bi bi-award"></i> ${s.specialite}</span></td>
+                <td><i class="bi bi-cake2"></i> ${s.age} ans</td>
+                <td><span class="text-muted small"><i class="bi bi-clock-history"></i> ${s.lastUpdated || 'récent'}</span></td>
+                <td><div class="action-btns">
+                    <button class="btn-icon-sm btn-view" onclick="viewStudent(${s.id})" data-bs-toggle="tooltip" title="Voir"><i class="bi bi-eye-fill"></i></button>
+                    <button class="btn-icon-sm btn-edit" onclick="openEditModal(${s.id})" data-bs-toggle="tooltip" title="Modifier"><i class="bi bi-pencil-fill"></i></button>
+                    <button class="btn-icon-sm btn-danger-custom" onclick="deleteStudent(${s.id})" data-bs-toggle="tooltip" title="Supprimer"><i class="bi bi-trash3-fill"></i></button>
+                </div></td>
+            </tr>`;
+        });
+        tbody.innerHTML = html;
+        document.getElementById("studentCount").innerText = students.length;
+        if(typeof bootstrap !== 'undefined') {
+            document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => new bootstrap.Tooltip(el));
+        }
+    }
+
+    function viewStudent(id) {
+        const s = students.find(st => st.id == id);
+        if(s) {
+            document.getElementById("viewDetails").innerHTML = `
+                <div class="text-center mb-3"><div class="avatar-placeholder mx-auto" style="width:70px;height:70px;font-size:28px;">${s.nom.charAt(0)}</div></div>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between"><strong>Nom :</strong> ${s.nom} ${s.prenom}</li>
+                    <li class="list-group-item d-flex justify-content-between"><strong>Sexe :</strong> ${s.sexe}</li>
+                    <li class="list-group-item d-flex justify-content-between"><strong>Spécialité :</strong> ${s.specialite}</li>
+                    <li class="list-group-item d-flex justify-content-between"><strong>Âge :</strong> ${s.age} ans</li>
+                    <li class="list-group-item d-flex justify-content-between"><strong>Dernière MAJ :</strong> ${s.lastUpdated}</li>
+                </ul>`;
+            new bootstrap.Modal(document.getElementById("viewModal")).show();
+        }
+    }
+
+    function openAddModal() {
+        document.getElementById("modalTitle").innerText = "Ajouter un étudiant";
+        document.getElementById("studentForm").reset();
+        document.getElementById("studentId").value = "";
+        document.getElementById("sexe").value = "Homme";
+        document.getElementById("specialite").value = "Informatique";
+        document.getElementById("age").value = "21";
+        new bootstrap.Modal(document.getElementById("studentModal")).show();
+    }
+
+    function openEditModal(id) {
+        const s = students.find(st => st.id == id);
+        if(s) {
+            document.getElementById("modalTitle").innerText = "Modifier l'étudiant";
+            document.getElementById("studentId").value = s.id;
+            document.getElementById("nom").value = s.nom;
+            document.getElementById("prenom").value = s.prenom;
+            document.getElementById("sexe").value = s.sexe;
+            document.getElementById("specialite").value = s.specialite;
+            document.getElementById("age").value = s.age;
+            new bootstrap.Modal(document.getElementById("studentModal")).show();
+        }
+    }
+
+    function saveStudentFromModal() {
+        const id = document.getElementById("studentId").value;
+        const nom = document.getElementById("nom").value.trim();
+        const prenom = document.getElementById("prenom").value.trim();
+        const sexe = document.getElementById("sexe").value;
+        const specialite = document.getElementById("specialite").value.trim();
+        const age = parseInt(document.getElementById("age").value);
+        if(!nom || !prenom) return alert("Nom et prénom requis");
+        if(isNaN(age) || age<17 || age>99) return alert("Âge invalide (17-99)");
+        const data = { nom, prenom, sexe, specialite, age };
+        if(id === "") addStudent(data);
+        else editStudent(parseInt(id), data);
+        bootstrap.Modal.getInstance(document.getElementById("studentModal")).hide();
+    }
+
+    function performSearch() {
+        currentFilter = document.getElementById("searchInput").value;
+        renderTable();
+    }
+
+    // Sidebar responsive
+    function toggleSidebarMobile() {
+        document.getElementById("sidebarId").classList.toggle("show");
+    }
+    function closeSidebar() {
+        document.getElementById("sidebarId").classList.remove("show");
+    }
+    document.addEventListener("click", function(e) {
+        const sidebar = document.getElementById("sidebarId");
+        const toggleBtn = document.querySelector(".toggle-sidebar-btn");
+        if(window.innerWidth <= 768 && sidebar && sidebar.classList.contains("show")) {
+            if(!sidebar.contains(e.target) && e.target !== toggleBtn && !toggleBtn?.contains(e.target)) {
+                sidebar.classList.remove("show");
+            }
+        }
+    });
+
+    // Theme
+    function initTheme() {
+        const btns = document.querySelectorAll('[data-bs-theme-value]');
+        const root = document.documentElement;
+        btns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const theme = btn.getAttribute('data-bs-theme-value');
+                root.setAttribute('data-bs-theme', theme);
+                localStorage.setItem('theme', theme);
+                btns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+            });
+        });
+        const saved = localStorage.getItem('theme');
+        if(saved) root.setAttribute('data-bs-theme', saved);
+    }
+
+    window.onload = () => {
+        loadData();
+        initTheme();
+        document.getElementById("openAddModalBtn").addEventListener("click", openAddModal);
+        document.getElementById("nav-add-quick").addEventListener("click", (e) => { e.preventDefault(); openAddModal(); });
+        document.getElementById("saveStudentBtn").addEventListener("click", saveStudentFromModal);
+        document.getElementById("searchBtn").addEventListener("click", performSearch);
+        document.getElementById("searchInput").addEventListener("keyup", (e) => { if(e.key === "Enter") performSearch(); });
+        document.getElementById("nav-home").addEventListener("click", (e) => { e.preventDefault(); currentFilter = ""; document.getElementById("searchInput").value = ""; renderTable(); });
+    };
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
