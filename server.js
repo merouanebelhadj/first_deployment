@@ -27,15 +27,15 @@ mongoose.connect("mongodb+srv://merouane:mNb7IB5J7byYuVfH@cluster0.qsmyaqd.mongo
   const Customer=require("./models/customerSchema")
 
  //GET REQUEST
- app.get('login', (req, res) => {
-  res.render('user/add');
+ app.get('/', (req, res) => {
+  res.render('login');
 });
 
  app.get("/", (req, res) => {
   Customer.find()
     .then((result) => {
       console.log(result)
-      res.render("index",{arr: result});
+      res.render("index1",{arr: result});
       })
     .catch((err)  => {
       console.log(err);
