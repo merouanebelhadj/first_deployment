@@ -27,6 +27,9 @@ mongoose.connect("mongodb+srv://merouane:mNb7IB5J7byYuVfH@cluster0.qsmyaqd.mongo
   const Customer=require("./models/customerSchema")
 
  //GET REQUEST
+ app.get('login', (req, res) => {
+  res.render('user/add');
+});
 
  app.get("/", (req, res) => {
   Customer.find()

@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ALFAPIPE – Ressources Humaines</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --orange: #E8541A;
+      --blue:   #1B6CA8;
+      --teal:   #3A9E9E;
+      --bg:     #C8D4DC;
+      --panel:  #D6DFE5;
+      --green:  #2DB52D;
+      --red:    #D42B2B;
+      --text:   #2a2a2a;
+      --shadow: 0 8px 32px rgba(0,0,0,0.22);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Source Sans 3', sans-serif;
+      background: var(--bg);
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Background waterfall-like blobs */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 60% 80% at 85% 50%, rgba(27,108,168,0.28) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 90% 20%, rgba(58,158,158,0.18) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 70% at 80% 80%, rgba(27,108,168,0.15) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Animated water ripple effect (right side) */
+    .water-bg {
+      position: fixed;
+      right: 0; top: 0;
+      width: 38%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+      opacity: 0.55;
+    }
+    .water-bg span {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(27,108,168,0.4);
+      animation: ripple 5s infinite ease-out;
+    }
+    .water-bg span:nth-child(1) { width: 200px; height: 200px; top: 30%; right: 10%; animation-delay: 0s; }
+    .water-bg span:nth-child(2) { width: 340px; height: 340px; top: 25%; right: 5%;  animation-delay: 1s; }
+    .water-bg span:nth-child(3) { width: 480px; height: 480px; top: 20%; right: 0%;  animation-delay: 2s; }
+    .water-bg span:nth-child(4) { width: 160px; height: 160px; top: 55%; right: 15%; animation-delay: 0.5s; }
+    .water-bg span:nth-child(5) { width: 300px; height: 300px; top: 50%; right: 8%;  animation-delay: 1.5s; }
+    @keyframes ripple {
+      0%   { transform: scale(0.7); opacity: 0.7; }
+      100% { transform: scale(1.3); opacity: 0; }
+    }
+
+    /* Main card */
+    .card {
+      position: relative;
+      z-index: 1;
+      background: var(--panel);
+      border: 2.5px solid var(--teal);
+      border-radius: 6px;
+      width: 580px;
+      padding: 36px 48px 44px;
+      box-shadow: var(--shadow);
+      animation: fadeIn 0.5s ease both;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Header row: logo + title */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 38px;
+    }
+
+    /* Logo box */
+    .logo-box {
+      flex-shrink: 0;
+      width: 110px;
+      height: 110px;
+      background: var(--blue);
+      border-radius: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 10px;
+      box-shadow: 0 4px 14px rgba(27,108,168,0.35);
+    }
+    .logo-box svg {
+      width: 72px;
+      height: 72px;
+    }
+    .logo-box .brand {
+      font-family: 'Oswald', sans-serif;
+      font-size: 15px;
+      letter-spacing: 2px;
+      color: var(--orange);
+      margin-top: 4px;
+    }
+
+    .title {
+      font-family: 'Oswald', sans-serif;
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--teal);
+      letter-spacing: 1.5px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    /* Form fields */
+    .field {
+      display: flex;
+      align-items: center;
+      margin-bottom: 22px;
+    }
+    .field label {
+      width: 110px;
+      flex-shrink: 0;
+      font-size: 15px;
+      color: var(--text);
+      text-align: right;
+      padding-right: 18px;
+    }
+    .field input {
+      flex: 1;
+      height: 40px;
+      background: #fff;
+      border: 2px solid var(--teal);
+      border-radius: 3px;
+      padding: 0 12px;
+      font-size: 15px;
+      font-family: 'Source Sans 3', sans-serif;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .field input:focus {
+      border-color: var(--orange);
+      box-shadow: 0 0 0 3px rgba(232,84,26,0.15);
+    }
+
+    /* Error message */
+    .error-msg {
+      display: none;
+      margin-left: 110px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      color: var(--red);
+      font-weight: 600;
+    }
+    .error-msg.show { display: block; }
+
+    /* Buttons row */
+    .buttons {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-top: 32px;
+      margin-left: 110px;
+    }
+    .btn {
+      padding: 10px 40px;
+      font-family: 'Oswald', sans-serif;
+      font-size: 17px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: filter 0.18s, transform 0.12s;
+    }
+    .btn:hover  { filter: brightness(1.12); }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-login { background: var(--green); color: #fff; }
+    .btn-exit  { background: var(--red);   color: #fff; }
+
+    /* Loading spinner inside button */
+    .btn-login.loading {
+      pointer-events: none;
+      opacity: 0.8;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Animated background -->
+  <div class="water-bg">
+    <span></span><span></span><span></span><span></span><span></span>
+  </div>
+
+  <div class="card">
+    <!-- Header -->
+    <div class="header">
+      <div class="logo-box">
+        <img src="logoo.png" alt=" Logo" style="width:150px; height:140px; object-fit:contain;" />
+      </div>
+      <div class="title">Ressources Humaines</div>
+    </div>
+
+    <!-- Form -->
+    <div class="field">
+      <label for="username">username</label>
+      <input type="text" id="username" autocomplete="username" />
+    </div>
+
+    <div class="field">
+      <label for="password">password</label>
+      <input type="password" id="password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') handleLogin()" />
+    </div>
+
+    <div class="error-msg" id="errorMsg">Nom d'utilisateur ou mot de passe incorrect.</div>
+
+    <!-- Buttons -->
+    <div class="buttons">
+      <button class="btn btn-login" id="loginBtn" onclick="handleLogin()">Login</button>
+      <button class="btn btn-exit"  onclick="handleExit()">Exit</button>
+    </div>
+  </div>
+
+  <script>
+    // Initialisation : créer un utilisateur par défaut dans localStorage si aucun n'existe
+    function initDefaultUser() {
+      if (!localStorage.getItem('user')) {
+        // Utilisateur par défaut : username = "admin", password = "admin123"
+        const defaultUser = {
+          username: 'admin',
+          password: 'admin123'
+        };
+        localStorage.setItem('user', JSON.stringify(defaultUser));
+        console.log('Utilisateur par défaut créé : admin / admin123');
+      }
+    }
+
+    // Appeler l'initialisation au chargement
+    initDefaultUser();
+
+    function handleLogin() {
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorMsg = document.getElementById('errorMsg');
+      const loginBtn = document.getElementById('loginBtn');
+
+      errorMsg.classList.remove('show');
+
+      if (!username || !password) {
+        errorMsg.textContent = 'Veuillez remplir tous les champs.';
+        errorMsg.classList.add('show');
+        return;
+      }
+
+      loginBtn.textContent = '...';
+      loginBtn.classList.add('loading');
+
+      // Simuler un délai pour l'effet de chargement
+      setTimeout(() => {
+        // Récupérer l'utilisateur stocké
+        const storedUser = JSON.parse(localStorage.getItem('user'));
+
+        if (storedUser && storedUser.username === username && storedUser.password === password) {
+          // Connexion réussie : stocker une session
+          localStorage.setItem('loggedIn', 'true');
+          // MODIFICATION ICI : Redirection vers index.ejs (ou route '/index')
+          window.location.href = '/index';   // Adaptez selon votre routage (ex: '/index.ejs')
+        } else {
+          errorMsg.textContent = 'Nom d\'utilisateur ou mot de passe incorrect.';
+          errorMsg.classList.add('show');
+          loginBtn.textContent = 'Login';
+          loginBtn.classList.remove('loading');
+        }
+      }, 500); // délai pour simuler le traitement
+    }
+
+    function handleExit() {
+      if (confirm('Voulez-vous quitter ?')) window.close();
+    }
+  </script>
+</body>
+</html>
