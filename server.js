@@ -27,7 +27,7 @@ mongoose.connect("mongodb+srv://merouane:mNb7IB5J7byYuVfH@cluster0.qsmyaqd.mongo
   const Customer=require("./models/customerSchema")
 
  //GET REQUEST
- app.get('/', (req, res) => {
+ app.get('/index', (req, res) => {
   res.render('index');
 });
 
