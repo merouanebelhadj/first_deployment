@@ -31,11 +31,11 @@ mongoose.connect("mongodb+srv://merouane:mNb7IB5J7byYuVfH@cluster0.qsmyaqd.mongo
   res.render('index');
 });
 
- app.get("/login", (req, res) => {
+ app.get("/", (req, res) => {
   Customer.find()
     .then((result) => {
       console.log(result)
-      res.render("index",{arr: result});
+      res.render("",{arr: result});
       })
     .catch((err)  => {
       console.log(err);
