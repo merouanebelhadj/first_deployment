@@ -28,7 +28,7 @@ mongoose.connect("mongodb+srv://merouane:mNb7IB5J7byYuVfH@cluster0.qsmyaqd.mongo
 
  //GET REQUEST
  app.get('/', (req, res) => {
-  res.render('login');
+  res.render('index');
 });
 
  app.get("/", (req, res) => {
