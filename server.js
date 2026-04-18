@@ -34,8 +34,8 @@ app.get("/", (req, res) => {
 });
 
 // INDEX PAGE
-app.get('/index', (req, res) => {
-    res.render('index');
+app.get('/login', (req, res) => {
+    res.render('login');
 });
 
 // ADD PAGE
